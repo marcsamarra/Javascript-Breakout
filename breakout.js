@@ -1,5 +1,11 @@
+// Javascript arkanoid
+// https://www.youtube.com/watch?v=b6du6MvQmuQ&t=345s
+
 const canvas = document.querySelector("canvas")
 const ctx = canvas.getContext("2d")
+
+const $sprite = document.querySelector('#sprite')
+const $bricks = document.querySelector('#bricks')
 
 canvas.width =448
 canvas.height=400
@@ -20,7 +26,7 @@ let paddley = canvas.height - paddleHeight - 10;
 let rightPressed =false;
 let leftPressed =false;
 
-let paddlesensivility = 10;
+let paddleincrease = 10;
 
 initEvents()
 draw()
@@ -52,8 +58,25 @@ function drawBall() {
 }
 
 function drawPaddle() {
-    ctx.fillStyle ='#09F';
-    ctx.fillRect(paddlex,paddley,paddleWidth,paddleHeight);
+    //ctx.fillStyle ='#09F';
+    //ctx.fillRect(paddlex,paddley,paddleWidth,paddleHeight);
+
+    // ctx.drawImage(
+    //     $sprite, // imagen
+    //     29, // clipX: coordenadas de recorte
+    //     174, // clipY: coordenadas de recorte
+    //     paddleWidth, // el tamaño del recorte
+    //     paddleHeight, // tamaño del recorte
+    //     paddlex, // posición X del dibujo
+    //     paddley, // posición Y del dibujo
+    //     paddleWidth, // ancho del dibujo
+    //     paddleHeight // alto del dibujo
+    //     )
+    ctx.drawImage (
+         $sprite, 29,174, paddleWidth,paddleHeight,
+         paddlex,paddley,
+         paddleWidth,paddleHeight
+    );
 }
 
 function drawBricks() {
@@ -61,24 +84,26 @@ function drawBricks() {
 }
 
 function collissionDetection() {
-    if(x>canvas.width || x < 0 ) {
-        dx=dx*-1;
-    }
- if(y>canvas.height || y < 0) {
+
+    if (y>paddley && x> paddlex && x<paddlex+paddleWidth) {
         dy=dy*-1;
     }
 
-   
 
+    
+    if(x>canvas.width || x < 0 ) {
+        dx=dx*-1;
+    }
+ 
+    if(y>canvas.height || y < 0) {
+        dy=dy*-1;
+    }
 }
-
 
 function initEvents()
 {
     document.addEventListener('keydown',KeyDownHandler)
     document.addEventListener('keyup',keyUpHandler)
-
-
 
     function KeyDownHandler (event)
     {
@@ -92,9 +117,6 @@ function initEvents()
         {
             leftPressed = true;
         }
-
-
-
     }
 
     function keyUpHandler (event)
@@ -122,11 +144,11 @@ function ballMovement() {
 
 function paddleMovement() {
     if (rightPressed && paddlex < canvas.width-paddleWidth){
-        paddlex += paddlesensivility
+        paddlex += paddleincrease
     }
 
     else if (leftPressed && paddlex > 0){
-        paddlex -= paddlesensivility
+        paddlex -= paddleincrease
     }
 
 
